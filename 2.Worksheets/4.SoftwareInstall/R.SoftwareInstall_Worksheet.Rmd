@@ -1,6 +1,6 @@
 ---
 title: '4\. Worksheet: Software Installation'
-author: "Student Name"
+author: "Danny Peltier"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
 ---
@@ -24,7 +24,7 @@ It is due on **March 24^th^, 2021 at 12:00 (noon)**.
 
     E.g., Print "*Hello, World!*"
 ```{r}
-
+print("Hello, world")
 
 ```
 
