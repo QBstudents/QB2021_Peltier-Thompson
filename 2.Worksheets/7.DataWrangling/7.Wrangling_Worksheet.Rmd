@@ -20,7 +20,7 @@ We will learn about these tools while also gaining exposure to R packages that a
 ```{r, results = 'hide'}
 rm(list=ls()) 
 getwd() 
-setwd("~/GitHub/QB-2021/1.Handouts/7.ControlStructures")
+setwd("C:/Users/Danny/Desktop/GitHub/QB2021_Peltier-Thompson/2.Worksheets/7.DataWrangling")
 ```
 
 ## 2) SIMULATE BIODIVERSITY 
@@ -241,6 +241,68 @@ But the SAR is also influenced by biological phenomena including dispersal limit
 Feel free to choose different values for the the function's arguments. 
 Create an SAR plot and calculate the corresponding *z*-value. 
 
+```{r}
+com_p <- sim_poisson_community(s_pool = 1000, n_sim = 10000, sad_type = "lnorm", sad_coef = list("meanlog" = 2, "sdlog" = 1))
+# visualize site
+plot(com_p)
+
+
+A <- seq(0.004,0.1,0.002)
+dfs <- vector("list", length(A))
+for(i in 1:length(A)) {
+  cm_p <- sample_quadrats(com_p, 5, quadrat_area = A[i], method = "random", plot = FALSE, avoid_overlap = T)
+  cm_p_df <- cm_p$spec_dat %>%
+    mutate(richness = rowSums(.[, 1:ncol(cm_p$spec_dat)] > 1)) %>%
+    mutate(area = A[i]) %>%
+    select(area, richness)
+  dfs[[i]] <- cm_p_df
+
+}
+
+com_p_nonzero <- bind_rows(dfs) %>%
+  filter(richness > 0) %>%
+  mutate(l_richness = log(richness)) %>%
+  mutate(l_area = log(area))
+
+plot.new()
+plot(com_p_nonzero[,4], com_p_nonzero[,3], xlab = "log area", ylab = "log richness")
+linreg <- lm(l_richness ~ l_area, data = com_p_nonzero)
+z1 <- print(linreg$coefficients[['l_area']])
+abline(lm(l_richness ~ l_area, data = com_p_nonzero))
+
+# question 2
+
+com_t <- sim_thomas_community(s_pool = 1000, n_sim = 10000, sad_type = "lnorm", sad_coef = list("meanlog" = 2, "sdlog" = 1))
+# visualize site
+plot(com_t)
+
+
+A2 <- seq(0.004,0.1,0.002)
+dfs2 <- vector("list", length(A2))
+for(i in 1:length(A2)) {
+  cm_t <- sample_quadrats(com_t, 5, quadrat_area = A2[i], method = "random", plot = FALSE, avoid_overlap = T)
+  cm_t_df <- cm_t$spec_dat %>%
+    mutate(richness = rowSums(.[, 1:ncol(cm_t$spec_dat)] > 1)) %>%
+    mutate(area = A2[i]) %>%
+    select(area, richness)
+  dfs2[[i]] <- cm_t_df
+
+}
+
+com_t_nonzero <- bind_rows(dfs2) %>%
+  filter(richness > 0) %>%
+  mutate(l_richness = log(richness)) %>%
+  mutate(l_area = log(area))
+
+plot.new()
+plot(com_t_nonzero[,4], com_t_nonzero[,3], xlab = "log area", ylab = "log richness")
+linreg2 <- lm(l_richness ~ l_area, data = com_t_nonzero)
+z2 <- print(linreg2$coefficients[['l_area']])
+abline(lm(l_richness ~ l_area, data = com_t_nonzero))
+
+# question 3: both the poisson and thomas community SARS had a positive correlation between area and species richness. The rate at which species increases with area is greater in the poisson SAR than in the thomas SAR because the poisson distributed species randomly in the community while thomas distributed species in a patchy way. I kept having issues with my quadrants overlapping (I would get ~20 errors when avoid_overlap = T and ~40 when avoid_overlap = F I was still able to do the linear regression so I figured it was ok?) so I would fix that in more elaborate simulations. I would also like to be able to edit the landscape(?) by adding areas that species cannot be distributed and see if the distance from a barrier impacts abundance. It would also be interesting to see how area affects evenness and diversity and whether or not they would have the same relationship as area and richness.
+
+```
 2. The `sim_poisson_community`function simulates species that have a random spatial distribution.
 However, in nature, this is rarely the case. 
 Species often have patchy distributions, which can be simulated in `mobsim` using the the `sim_thomas_community` function.
