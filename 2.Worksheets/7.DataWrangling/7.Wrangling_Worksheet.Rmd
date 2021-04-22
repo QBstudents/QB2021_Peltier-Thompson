@@ -300,7 +300,7 @@ linreg2 <- lm(l_richness ~ l_area, data = com_t_nonzero)
 z2 <- print(linreg2$coefficients[['l_area']])
 abline(lm(l_richness ~ l_area, data = com_t_nonzero))
 
-# question 3: both the poisson and thomas community SARS had a positive correlation between area and species richness. The rate at which species increases with area is greater in the poisson SAR than in the thomas SAR because the poisson distributed species randomly in the community while thomas distributed species in a patchy way. I kept having issues with my quadrants overlapping (I would get ~20 errors when avoid_overlap = T and ~40 when avoid_overlap = F I was still able to do the linear regression so I figured it was ok?) so I would fix that in more elaborate simulations. I would also like to be able to edit the landscape(?) by adding areas that species cannot be distributed and see if the distance from a barrier impacts abundance. It would also be interesting to see how area affects evenness and diversity and whether or not they would have the same relationship as area and richness.
+# question 3: 
 
 ```
 2. The `sim_poisson_community`function simulates species that have a random spatial distribution.
@@ -312,6 +312,8 @@ Then, create another SAR plot from the patchy community and compare its *z*-valu
 3. Explain the SAR patterns from your simulations along with any observed differences based on how we have simulated the communities.
 Are there any features that you might include with a more elaborate simulation? 
 Describe. 
+
+Both the poisson and thomas community SARS had a positive correlation between area and species richness. The rate at which species increases with area is greater in the poisson SAR than in the thomas SAR because the poisson distributed species randomly in the community while thomas distributed species in a patchy way. I kept having issues with my quadrants overlapping (I would get ~20 errors when avoid_overlap = T and ~40 when avoid_overlap = F I was still able to do the linear regression so I figured it was ok?) so I would fix that in more elaborate simulations. I would also like to be able to edit the landscape(?) by adding areas that species cannot be distributed and see if the distance from a barrier impacts abundance. It would also be interesting to see how area affects evenness and diversity and whether or not they would have the same relationship as area and richness.
 
 ## SUBMITTING YOUR ASSIGNMENT
 Use Knitr to create a PDF of your completed 7.Wrangling_Worksheet.Rmd document, push it to GitHub, and create a pull request.
